@@ -5,13 +5,15 @@ on:
     branches:
       - main
     paths:
-      - '**.py'
+      - pinrex/**
+      - tests/**
 
   pull_request:
     branches:
       - main
     paths:
-      - '**.py'
+      - pinrex/**
+      - tests/**
 
 jobs:
   ci:
