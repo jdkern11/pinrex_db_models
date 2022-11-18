@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "pinrex.db_models"
+version = "0.1.0"
+description = ""
+authors = ["jdkern11 <leolion29@gmail.com>"]
+readme = "README.md"
+packages = [{include = "pinrex"}]
+
+[tool.poetry.dependencies]
+python = ">=3.8,<4.0"
+SQLAlchemy = "^1.4.44"
+psycopg2-binary = "^2.9.5"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.2.0"
+black = "^22.10.0"
+SQLAlchemy-Utils = "^0.38.3"
+pytest-cov = "^4.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
