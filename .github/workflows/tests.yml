@@ -2,14 +2,16 @@ name: tests
 
 on:
   push:
-    branches: [ main ]
-      paths:
-        - '**.py'
+    branches:
+      - main
+    paths:
+      - '**.py'
 
   pull_request:
-    branches: [ main ]
-      paths:
-        - '**.py'
+    branches:
+      - main
+    paths:
+      - '**.py'
 
 jobs:
   ci:

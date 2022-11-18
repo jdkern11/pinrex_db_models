@@ -4,6 +4,7 @@
 **/.venv/
 **/*.swp
 .*/
+.coverage
 
 !.gitignore
 !.githooks

@@ -101,7 +101,7 @@ class Solvent(Base):
     __tablename__ = "solvents"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    smiles = Column(Text, unique=True)
+    smiles = Column(Text, unique=True, nullable=False)
     fingerprint = Column(JSON, nullable=True)
     map4_fingerprint = Column(JSON, nullable=True)
     names = relationship("SolventName", back_populates="solvent")
@@ -129,7 +129,7 @@ class SolventName(Base):
     __tablename__ = "solvent_names"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    sol_id = Column(Integer, ForeignKey("solvents.id"))
+    sol_id = Column(Integer, ForeignKey("solvents.id"), nullable=False)
     name = Column(Text, nullable=False)
     search_name = Column(Text, nullable=False)
     naming_convention = Column(Text, nullable=True)
@@ -211,7 +211,7 @@ class Property(Base):
     __tablename__ = "properties"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(Text, unique=False)
+    name = Column(Text, unique=False, nullable=False)
     short_name = Column(Text, nullable=True)
     unit = Column(Text, nullable=True)
     plot_symbol = Column(Text, nullable=True)
@@ -291,7 +291,7 @@ class Monomer(Base):
     __tablename__ = "monomers"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    smiles = Column(Text, unique=True)
+    smiles = Column(Text, unique=True, nullable=False)
     reference_id = Column(Text, nullable=True)
     reference = Column(Text, nullable=True)
     substructures = relationship("MonomerSubstructures", back_populates="monomer")

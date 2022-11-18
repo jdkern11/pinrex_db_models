@@ -160,17 +160,3 @@ def test_add_solvent_name(db_session, names):
             .one()
         )
         assert solvent_name.search_name == search_name
-
-def test_currect_database():
-    engine = create_engine(
-        "postgresql+psycopg2://{}:{}@{}:{}/{}".format(
-            os.environ.get("PINREX_DB_USER"),
-            os.environ.get("PINREX_DB_PASSWORD"),
-            os.environ.get("PINREX_DB_HOST"),
-            os.environ.get("PINREX_DB_PORT"),
-            os.environ.get("PINREX_DB_NAME"),
-        )
-    )
-    if database_exists(engine.url):
-        connection = engine.connect()
-        db_models.Base.metadata.bind = connection
