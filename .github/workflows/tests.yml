@@ -15,6 +15,20 @@ jobs:
         os: [ubuntu-18.04, macos-latest, windows-latest]
         poetry-version: ["1.2.0"]
 
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_DB: pinrex
+
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
@@ -29,11 +43,20 @@ jobs:
 
       - name: Install dependencies
         run: poetry install
+      - name: Run coverage test
+        run: poetry run pytest --cov-report xml:coverage.xml --cov=pinrex/db_models/
+        env:
+          POSTGRES_HOST: postgres
+          PINREX_DB_USER: postgres
+          PINREX_DB_PASSWORD: postgres
+          PINREX_DB_HOST: localhost
+          PINREX_DB_PORT: 5432
+          PINREX_DB_NAME: pinrex
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./coverage1.xml,./coverage2.xml
+          files: ./coverage.xml
           directory: ./coverage/
           name: codecov-pinrex_db_models
           fail_ci_if_error: false
