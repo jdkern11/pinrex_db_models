@@ -11,7 +11,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.8", "3.9", "3.10"]
+        python-version: ["3.8"] #, "3.9", "3.10"]
         os: [ubuntu-18.04]
         poetry-version: ["1.2.0"]
 
@@ -46,11 +46,9 @@ jobs:
       - name: Run coverage test
         run: poetry run pytest --cov-report xml:coverage.xml --cov=pinrex/db_models/
         env:
-          POSTGRES_HOST: postgres
-          POSTGRES_PORT: 5432
           PINREX_DB_USER: postgres
           PINREX_DB_PASSWORD: postgres
-          PINREX_DB_HOST: localhost
+          PINREX_DB_HOST: postgres
           PINREX_DB_PORT: 5432
           PINREX_DB_NAME: pinrex
       - name: Upload coverage to Codecov
