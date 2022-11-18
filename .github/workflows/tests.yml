@@ -29,6 +29,9 @@ jobs:
           --health-timeout 5s
           --health-retries 5
 
+        ports:
+          - 5432:5432
+
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
@@ -48,7 +51,7 @@ jobs:
         env:
           PINREX_DB_USER: postgres
           PINREX_DB_PASSWORD: postgres
-          PINREX_DB_HOST: postgres
+          PINREX_DB_HOST: localhost
           PINREX_DB_PORT: 5432
           PINREX_DB_NAME: pinrex
       - name: Upload coverage to Codecov
