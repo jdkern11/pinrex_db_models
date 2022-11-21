@@ -10,6 +10,7 @@ packages = [{include = "pinrex"}]
 python = ">=3.8,<4.0"
 SQLAlchemy = "^1.4.44"
 psycopg2-binary = "^2.9.5"
+alembic = "^1.8.1"
 
 
 [tool.poetry.group.dev.dependencies]

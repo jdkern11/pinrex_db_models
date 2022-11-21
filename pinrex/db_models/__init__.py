@@ -244,6 +244,7 @@ class PolymerProperty(Base):
     value = Column(Float, nullable=False)
     method = Column(Text, nullable=True)
     reference = Column(Text)
+    note = Column(Text)
     property = relationship("Property", back_populates="polymer_properties")
     polymer = relationship("Polymer", back_populates="properties")
 
@@ -298,11 +299,23 @@ class Monomer(Base):
 
 
 class MonomerSubstructures(Base):
+    """Indicates if SMARTS substructure is located in the monomer
+
+    Attributes:
+        smarts_id (int):
+            Smarts id from the smarts table.
+        monomer_id (int):
+            Monomer id from the monomers table.
+    """
+
     __tablename__ = "monomer_substructures"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    smarts_id = Column(Integer, ForeignKey("smarts.id"), nullable=False)
-    monomer_id = Column(Integer, ForeignKey("monomers.id"), nullable=False)
+    smarts_id = Column(
+        Integer, ForeignKey("smarts.id"), nullable=False, primary_key=True
+    )
+    monomer_id = Column(
+        Integer, ForeignKey("monomers.id"), nullable=False, primary_key=True
+    )
     monomer = relationship("Monomer", back_populates="substructures")
     smarts = relationship("Smarts", back_populates="monomer_substructures")
 
