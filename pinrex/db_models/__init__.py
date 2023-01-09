@@ -138,7 +138,7 @@ class Polymerization(Base):
     pol_id = Column(
         Integer, ForeignKey("polymers.id"), nullable=False, primary_key=True
     )
-    monomer = relationship("Monomer", back_populates="substructures")
+    monomers = relationship("Monomer", back_populates="polymerizations")
     polymerization_reaction = relationship(
         "PolymerizationReaction", back_populates="polymerizations"
     )
@@ -365,6 +365,7 @@ class Monomer(Base):
     reference_id = Column(Text, nullable=True)
     reference = Column(Text, nullable=True)
     substructures = relationship("MonomerSubstructures", back_populates="monomer")
+    substructures = relationship("Polymerization", back_populates="monomers")
 
 
 class MonomerSubstructures(Base):
