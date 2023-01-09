@@ -9,3 +9,8 @@
 
 SQLAlchemy models to format PostgreSQL database for data.
 
+## Upgrade
+```bash
+poetry run alembic revision --autogenerate -m "description of changes"
+poetry run alembic upgrade head
+```
