@@ -2,6 +2,7 @@ import os
 
 import pytest
 from sqlalchemy import create_engine
+from sqlalchemy.exc import DataError
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy_utils import database_exists, create_database
 
@@ -98,10 +99,15 @@ def seed_database(session):
             "map4_fingerprint": {"test": 3},
         }
     ]
+    props = [
+        {"name": "test_prop", "short_name": "tp", "unit": "t", "plot_symbol": "test"}
+    ]
     for polymer in polymers:
         session.add(db_models.Polymer(**polymer))
     for solvent in solvents:
         session.add(db_models.Solvent(**solvent))
+    for prop in props:
+        session.add(db_models.Property(**prop))
     session.commit()
 
 
@@ -160,3 +166,46 @@ def test_add_solvent_name(db_session, names):
             .one()
         )
         assert solvent_name.search_name == search_name
+
+
+def test_add_property_value_with_error(db_session):
+    polymer = db_session.query(db_models.Polymer).one()
+    prop = db_session.query(db_models.Property).one()
+    db_session.add(
+        db_models.PolymerProperty(
+            pol_id=polymer.id,
+            property_id=prop.id,
+            value=3,
+            error_value=1,
+            error_type="sd",
+            method="ml",
+            reference="test",
+            conditions={"n": 3},
+        )
+    )
+    db_session.commit()
+    prop = (
+        db_session.query(db_models.PolymerProperty)
+        .filter(db_models.PolymerProperty.reference == "test")
+        .one()
+    )
+    assert prop.error_type == db_models.PolymerPropertyErrorType.sd
+
+
+def test_add_property_value_with_bad_error_type(db_session):
+    polymer = db_session.query(db_models.Polymer).one()
+    prop = db_session.query(db_models.Property).one()
+    with pytest.raises(DataError):
+        db_session.add(
+            db_models.PolymerProperty(
+                pol_id=polymer.id,
+                property_id=prop.id,
+                value=3,
+                error_value=1,
+                error_type="std",
+                method="ml",
+                reference="test",
+                conditions={"n": 3},
+            )
+        )
+        db_session.commit()

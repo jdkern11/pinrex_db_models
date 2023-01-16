@@ -1,4 +1,5 @@
 from typing import Dict, List, Union
+from enum import unique, Enum
 from datetime import datetime, timezone, timedelta
 
 from sqlalchemy import (
@@ -13,7 +14,7 @@ from sqlalchemy import (
     UniqueConstraint,
 )
 from sqlalchemy.orm import declarative_base, relationship
-from sqlalchemy.dialects import postgresql
+from sqlalchemy.dialects.postgresql import ENUM, ARRAY
 
 from pinrex.db_models import helpers
 
@@ -49,9 +50,9 @@ class CSSTFile(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     file_name = Column(Text, unique=True, nullable=False)
     original_name = Column(Text, nullable=False)
-    polymers = Column(postgresql.ARRAY(Text, dimensions=1))
-    solvents = Column(postgresql.ARRAY(Text, dimensions=1))
-    concentrations = Column(postgresql.ARRAY(Float, dimensions=1))
+    polymers = Column(ARRAY(Text, dimensions=1))
+    solvents = Column(ARRAY(Text, dimensions=1))
+    concentrations = Column(ARRAY(Float, dimensions=1))
     date_added = Column(DateTime(timezone=True), nullable=False)
     stir_rate = Column(Float, nullable=False)
     start_of_experiment = Column(DateTime, nullable=False)
@@ -287,6 +288,17 @@ class Property(Base):
     polymer_properties = relationship("PolymerProperty", back_populates="property")
 
 
+@unique
+class PolymerPropertyErrorType(Enum):
+    sd = "sd"
+    sem = "sem"
+    variance = "variance"
+
+
+# instantiate this way so we can configure for alembic
+PolymerPropertyErrorTypeEnum = ENUM(PolymerPropertyErrorType)
+
+
 class PolymerProperty(Base):
     """Numerical property values associated with homopolymers
 
@@ -297,12 +309,19 @@ class PolymerProperty(Base):
             Table id of property in properties table.
         value (float):
             Value of property.
+        error_value (float):
+            Value of error type reported.
+        error_type (str):
+            Type of error reported. Must be one of 'sd' (standard deviation), 'sem'
+            (standard error of mean), or 'variance'.
         method (str):
             Method to calculate property. Could be 'exp' for experimental,
             'dft' for density functional theory, 'md' for molecular
             dynamics, or 'ml' for machine learning.
         reference (str):
             Reference property value was taken from.
+        conditions (Dict[str, Union[str, float]]):
+            Conditions used to obtain the result.
     """
 
     __tablename__ = "polymer_properties"
@@ -316,6 +335,9 @@ class PolymerProperty(Base):
     note = Column(Text)
     property = relationship("Property", back_populates="polymer_properties")
     polymer = relationship("Polymer", back_populates="properties")
+    error_value = Column(Float)
+    error_type = Column(PolymerPropertyErrorTypeEnum)
+    conditions = Column(JSON)
 
 
 class PolymerApplication(Base):
