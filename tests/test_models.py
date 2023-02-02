@@ -6,7 +6,8 @@ from sqlalchemy.exc import DataError
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy_utils import database_exists, create_database
 
-from pinrex import db_models
+from pinrex.db import Base
+from pinrex.db.models import polymer, solvent
 from .test_helpers import names
 
 
@@ -28,12 +29,12 @@ def connection():
 
 @pytest.fixture(scope="session")
 def setup_database(connection):
-    db_models.Base.metadata.bind = connection
-    db_models.Base.metadata.create_all()
+    Base.metadata.bind = connection
+    Base.metadata.create_all()
 
     yield
 
-    db_models.Base.metadata.drop_all()
+    Base.metadata.drop_all()
 
 
 def seed_database(session):
@@ -102,12 +103,12 @@ def seed_database(session):
     props = [
         {"name": "test_prop", "short_name": "tp", "unit": "t", "plot_symbol": "test"}
     ]
-    for polymer in polymers:
-        session.add(db_models.Polymer(**polymer))
-    for solvent in solvents:
-        session.add(db_models.Solvent(**solvent))
+    for pol in polymers:
+        session.add(polymer.Polymer(**pol))
+    for sol in solvents:
+        session.add(solvent.Solvent(**sol))
     for prop in props:
-        session.add(db_models.Property(**prop))
+        session.add(polymer.Property(**prop))
     session.commit()
 
 
@@ -123,57 +124,57 @@ def db_session(setup_database, connection):
 
 
 def test_add_polymer_name(db_session, names):
-    polymer = (
-        db_session.query(db_models.Polymer)
-        .filter(db_models.Polymer.rid == "R1000001")
+    pol = (
+        db_session.query(polymer.Polymer)
+        .filter(polymer.Polymer.rid == "R1000001")
         .one()
     )
     for name in names.keys():
         db_session.add(
-            db_models.PolymerName(
-                pol_id=polymer.id, name=name, naming_convention="unknown"
+            polymer.PolymerName(
+                pol_id=pol.id, name=name, naming_convention="unknown"
             )
         )
     db_session.commit()
 
     for name, search_name in names.items():
         polymer_name = (
-            db_session.query(db_models.PolymerName)
-            .filter(db_models.PolymerName.name == name)
+            db_session.query(polymer.PolymerName)
+            .filter(polymer.PolymerName.name == name)
             .one()
         )
         assert polymer_name.search_name == search_name
 
 
 def test_add_solvent_name(db_session, names):
-    solvent = (
-        db_session.query(db_models.Solvent)
-        .filter(db_models.Solvent.smiles == "CO")
+    sol = (
+        db_session.query(solvent.Solvent)
+        .filter(solvent.Solvent.smiles == "CO")
         .one()
     )
     for name in names.keys():
         db_session.add(
-            db_models.SolventName(
-                sol_id=solvent.id, name=name, naming_convention="unknown"
+            solvent.SolventName(
+                sol_id=sol.id, name=name, naming_convention="unknown"
             )
         )
     db_session.commit()
 
     for name, search_name in names.items():
         solvent_name = (
-            db_session.query(db_models.SolventName)
-            .filter(db_models.SolventName.name == name)
+            db_session.query(solvent.SolventName)
+            .filter(solvent.SolventName.name == name)
             .one()
         )
         assert solvent_name.search_name == search_name
 
 
 def test_add_property_value_with_error(db_session):
-    polymer = db_session.query(db_models.Polymer).one()
-    prop = db_session.query(db_models.Property).one()
+    pol = db_session.query(polymer.Polymer).one()
+    prop = db_session.query(polymer.Property).one()
     db_session.add(
-        db_models.PolymerProperty(
-            pol_id=polymer.id,
+        polymer.PolymerProperty(
+            pol_id=pol.id,
             property_id=prop.id,
             value=3,
             error_value=1,
@@ -185,20 +186,20 @@ def test_add_property_value_with_error(db_session):
     )
     db_session.commit()
     prop = (
-        db_session.query(db_models.PolymerProperty)
-        .filter(db_models.PolymerProperty.reference == "test")
+        db_session.query(polymer.PolymerProperty)
+        .filter(polymer.PolymerProperty.reference == "test")
         .one()
     )
-    assert prop.error_type == db_models.PolymerPropertyErrorType.sd
+    assert prop.error_type == polymer.PolymerPropertyErrorType.sd
 
 
 def test_add_property_value_with_bad_error_type(db_session):
-    polymer = db_session.query(db_models.Polymer).one()
-    prop = db_session.query(db_models.Property).one()
+    pol = db_session.query(polymer.Polymer).one()
+    prop = db_session.query(polymer.Property).one()
     with pytest.raises(DataError):
         db_session.add(
-            db_models.PolymerProperty(
-                pol_id=polymer.id,
+            polymer.PolymerProperty(
+                pol_id=pol.id,
                 property_id=prop.id,
                 value=3,
                 error_value=1,

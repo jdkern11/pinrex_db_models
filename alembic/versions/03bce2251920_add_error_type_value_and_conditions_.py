@@ -8,7 +8,7 @@ Create Date: 2023-01-16 11:43:17.786279
 from alembic import op
 import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
-from pinrex.db_models import PolymerPropertyErrorTypeEnum
+from pinrex.db.models.polymer import PolymerPropertyErrorTypeEnum
 
 # revision identifiers, used by Alembic.
 revision = '03bce2251920'

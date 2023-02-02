@@ -1,6 +1,6 @@
 import pytest
 
-from pinrex.db_models import helpers
+from pinrex.db import helpers
 
 
 @pytest.fixture
