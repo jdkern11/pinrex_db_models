@@ -7,7 +7,7 @@ from sqlalchemy import (
     JSON,
     UniqueConstraint,
     DateTime,
-    Float
+    Float,
 )
 from sqlalchemy.orm import relationship
 

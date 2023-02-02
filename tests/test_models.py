@@ -131,9 +131,7 @@ def test_add_polymer_name(db_session, names):
     )
     for name in names.keys():
         db_session.add(
-            polymer.PolymerName(
-                pol_id=pol.id, name=name, naming_convention="unknown"
-            )
+            polymer.PolymerName(pol_id=pol.id, name=name, naming_convention="unknown")
         )
     db_session.commit()
 
@@ -147,16 +145,10 @@ def test_add_polymer_name(db_session, names):
 
 
 def test_add_solvent_name(db_session, names):
-    sol = (
-        db_session.query(solvent.Solvent)
-        .filter(solvent.Solvent.smiles == "CO")
-        .one()
-    )
+    sol = db_session.query(solvent.Solvent).filter(solvent.Solvent.smiles == "CO").one()
     for name in names.keys():
         db_session.add(
-            solvent.SolventName(
-                sol_id=sol.id, name=name, naming_convention="unknown"
-            )
+            solvent.SolventName(sol_id=sol.id, name=name, naming_convention="unknown")
         )
     db_session.commit()
 
