@@ -1,17 +1,16 @@
-"""add models for tox21 data collected from Cooper and Schürer, 'Improving the Utility of the Tox21 Dataset by Deep Metadata Annotations and Constructing Reusable Benchmarked Chemical Reference Signatures', Molecules, vol. 24, no. 8, p. 1604, Apr. 2019, doi: 10.3390/molecules24081604.
+"""add models for tox21 data collected from Cooper and Schürer, 'Improving the Utility of the Tox21 Dataset by Deep Metadata Annotations and Constructing Reusable Benchmarked Chemical Reference Signatures', Molecules, vol. 24, no. 8, p. 1604, Apr. 2019, doi: 10.3390/molecules24081604
 
-Revision ID: 7b9a397b07b1
+Revision ID: efcf610d4b33
 Revises: 03bce2251920
-Create Date: 2023-02-03 10:16:42.348828
+Create Date: 2023-02-03 11:53:40.409049
 
 """
 from alembic import op
 import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
-from pinrex.db.models.toxicity import TargetModeOfActionEnum, ActivityEnum
 
 # revision identifiers, used by Alembic.
-revision = '7b9a397b07b1'
+revision = 'efcf610d4b33'
 down_revision = '03bce2251920'
 branch_labels = None
 depends_on = None
@@ -42,7 +41,7 @@ def upgrade() -> None:
     )
     op.create_table('tox21_molecules',
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
-    sa.Column('pubchem_aid', sa.Integer(), nullable=True),
+    sa.Column('pubchem_cid', sa.Integer(), nullable=True),
     sa.Column('tox21_sid', postgresql.ARRAY(sa.Integer(), dimensions=1), nullable=True),
     sa.Column('smiles', sa.Text(), nullable=False),
     sa.Column('fingerprint', sa.JSON(), nullable=True),
@@ -51,7 +50,7 @@ def upgrade() -> None:
     )
     op.create_table('tox_assays',
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
-    sa.Column('assay_type', sa.Text(), nullable=False),
+    sa.Column('assay_type', postgresql.ENUM('reporter', 'counter_screen', name='assaytype'), nullable=False),
     sa.Column('pair_id', sa.Integer(), nullable=True),
     sa.Column('pubchem_aid', sa.Integer(), nullable=True),
     sa.Column('tox21_aid', sa.Integer(), nullable=True),

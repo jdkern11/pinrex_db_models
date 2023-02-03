@@ -26,10 +26,17 @@ class Activity(Enum):
     inactive = "inactive"
     inconclusive = "inconclusive"
 
+@unique
+class AssayType(Enum):
+    """Enumerator for assay types"""
+
+    reporter = "reporter"
+    counter_screen = "counter_screen"
 
 # instantiate this way so we can configure for alembic
 TargetModeOfActionEnum = ENUM(TargetModeOfAction)
 ActivityEnum = ENUM(Activity)
+AssayTypeEnum = ENUM(AssayType)
 
 
 class Gene(Base):
@@ -122,7 +129,7 @@ class ToxAssay(Base):
     __tablename__ = "tox_assays"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    assay_type = Column(Text, nullable=False)
+    assay_type = Column(AssayTypeEnum, nullable=False)
     pair_id = Column(Integer)
     pubchem_aid = Column(Integer)
     tox21_aid = Column(Integer)
@@ -163,7 +170,7 @@ class Tox21Molecule(Base):
     __tablename__ = "tox21_molecules"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    pubchem_aid = Column(Integer)
+    pubchem_cid = Column(Integer)
     tox21_sid = Column(ARRAY(Integer, dimensions=1))
     smiles = Column(Text, nullable=False)
     fingerprint = Column(JSON)

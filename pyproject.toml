@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pinrex.db_models"
-version = "1.1.0"
+version = "1.1.1"
 description = ""
 authors = ["jdkern11 <leolion29@gmail.com>"]
 readme = "README.md"
