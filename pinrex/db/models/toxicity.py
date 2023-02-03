@@ -26,12 +26,14 @@ class Activity(Enum):
     inactive = "inactive"
     inconclusive = "inconclusive"
 
+
 @unique
 class AssayType(Enum):
     """Enumerator for assay types"""
 
     reporter = "reporter"
     counter_screen = "counter_screen"
+
 
 # instantiate this way so we can configure for alembic
 TargetModeOfActionEnum = ENUM(TargetModeOfAction)
