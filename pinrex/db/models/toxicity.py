@@ -56,7 +56,7 @@ class Gene(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(Text, unique=True, nullable=False)
-    uniprot_id = Column(Integer, unique=True)
+    uniprot_id = Column(Text, unique=True)
 
 
 class ExperimentalCellLine(Base):

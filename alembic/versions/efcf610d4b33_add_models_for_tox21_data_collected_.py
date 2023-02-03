@@ -34,7 +34,7 @@ def upgrade() -> None:
     op.create_table('genes',
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('name', sa.Text(), nullable=False),
-    sa.Column('uniprot_id', sa.Integer(), nullable=True),
+    sa.Column('uniprot_id', sa.Text(), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('name'),
     sa.UniqueConstraint('uniprot_id')
