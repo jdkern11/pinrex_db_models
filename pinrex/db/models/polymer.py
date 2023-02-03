@@ -24,6 +24,7 @@ PolymerPropertyErrorTypeEnum = ENUM(PolymerPropertyErrorType)
 
 class Polymer(Base):
     """Model to store polymer id and smiles
+
     Attributes:
         smiles (str):
             smiles string

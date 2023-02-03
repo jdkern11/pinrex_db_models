@@ -6,6 +6,7 @@ __all__ = [
     "monomer",
     "polymerization",
     "solvent",
+    "toxicity",
     "csst",
     "misc",
     "lab",
