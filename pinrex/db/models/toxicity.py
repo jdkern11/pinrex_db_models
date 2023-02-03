@@ -176,7 +176,7 @@ class Tox21Molecule(Base):
     tox21_sid = Column(ARRAY(Integer, dimensions=1))
     smiles = Column(Text, nullable=False)
     fingerprint = Column(JSON)
-    cluser = Column(Integer)
+    cluster = Column(Integer)
 
 
 class Tox21Data(Base):

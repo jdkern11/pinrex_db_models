@@ -45,7 +45,7 @@ def upgrade() -> None:
     sa.Column('tox21_sid', postgresql.ARRAY(sa.Integer(), dimensions=1), nullable=True),
     sa.Column('smiles', sa.Text(), nullable=False),
     sa.Column('fingerprint', sa.JSON(), nullable=True),
-    sa.Column('cluser', sa.Integer(), nullable=True),
+    sa.Column('cluster', sa.Integer(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('tox_assays',
