@@ -53,7 +53,7 @@ def upgrade() -> None:
     sa.Column('assay_type', postgresql.ENUM('reporter', 'counter_screen', name='assaytype'), nullable=False),
     sa.Column('pair_id', sa.Integer(), nullable=True),
     sa.Column('pubchem_aid', sa.Integer(), nullable=True),
-    sa.Column('tox21_aid', sa.Integer(), nullable=True),
+    sa.Column('tox21_aid', sa.Text(), nullable=True),
     sa.Column('reporter_gene_assay', sa.Text(), nullable=True),
     sa.Column('exp_cell_line_id', sa.Integer(), nullable=False),
     sa.Column('gene_id', sa.Integer(), nullable=True),

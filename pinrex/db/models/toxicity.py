@@ -134,7 +134,7 @@ class ToxAssay(Base):
     assay_type = Column(AssayTypeEnum, nullable=False)
     pair_id = Column(Integer)
     pubchem_aid = Column(Integer)
-    tox21_aid = Column(Integer)
+    tox21_aid = Column(Text)
     reporter_gene_assay = Column(Text)
     exp_cell_line_id = Column(
         Integer, ForeignKey("experimental_cell_lines.id"), nullable=False
