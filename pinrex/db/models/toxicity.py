@@ -6,6 +6,7 @@ from sqlalchemy.dialects.postgresql import ARRAY, ENUM
 
 from pinrex.db._base import Base
 
+
 @unique
 class TargetModeOfAction(Enum):
     """Enumerator for assay target modes of action"""
@@ -16,6 +17,7 @@ class TargetModeOfAction(Enum):
     inhibition = "inhibition"
     activation = "activation"
 
+
 @unique
 class Activity(Enum):
     """Enumerator for activity of molecule in an assay"""
@@ -23,6 +25,7 @@ class Activity(Enum):
     active = "active"
     inactive = "inactive"
     inconclusive = "inconclusive"
+
 
 # instantiate this way so we can configure for alembic
 TargetModeOfActionEnum = ENUM(TargetModeOfAction)
@@ -36,7 +39,7 @@ class Gene(Base):
         name:
             Name of the gene
         uniprot_id:
-            uniprot id. UniProt is a database of protein sequence and functional 
+            uniprot id. UniProt is a database of protein sequence and functional
             information.
     """
 
@@ -45,6 +48,7 @@ class Gene(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(Text, unique=True, nullable=False)
     uniprot_id = Column(Integer, unique=True)
+
 
 class ExperimentalCellLine(Base):
     """Model to store cell line information for assays
@@ -59,7 +63,7 @@ class ExperimentalCellLine(Base):
         experimental_cell_clo_id (str):
             Cell line ontology id of the experimental cell line.
         cellosaurus_id (str):
-            Cellosaurus is a knowledge resource on cell lines. This is the id in 
+            Cellosaurus is a knowledge resource on cell lines. This is the id in
             cellosaurs for the cell line the experimental cell line is modified from.
         organism (str):
             Species of origin.
@@ -78,6 +82,7 @@ class ExperimentalCellLine(Base):
     organism = Column(Text)
     organism_taxon_id = Column(Integer)
 
+
 class ToxAssay(Base):
     """Model to store toxicity assay data
 
@@ -85,14 +90,14 @@ class ToxAssay(Base):
         assay_type (str):
             If the assay is a reporter assay or counter screen (toxicity assay).
         pair_id (int):
-            Reporters are paired with counter screens. This id represents which 
+            Reporters are paired with counter screens. This id represents which
             ids are paired together in the database.
         pubchem_aid (int):
             pubchem assay id.
         tox21_aid (str):
             tox21 assay id.
         reporter_gene_assay (str):
-            what reporter is used in the assay if it is a reporter assay.  
+            what reporter is used in the assay if it is a reporter assay.
         exp_cell_line_id (int):
             ID of the experimental cell line used in the assay.
         gene_id (int):
@@ -100,16 +105,16 @@ class ToxAssay(Base):
         target (str):
             Biological pathways or molecules that a compound is intended to interact with.
         target_effect (str):
-            Effect of the compound on the target. 
+            Effect of the compound on the target.
         target_mode_of_action (str):
             If the compound is antagonistic, agonistic, causing permeabilization, or
             causing inhibition.
         kit (str):
-            Kit used in the assay. 
+            Kit used in the assay.
         physical_detection_method (str):
             Method to assess activity in the assay.
         detection_instrument (str):
-            Instrument used to detect the physical detection method. 
+            Instrument used to detect the physical detection method.
         definition (str):
             What the assay is testing for
     """
@@ -122,10 +127,11 @@ class ToxAssay(Base):
     pubchem_aid = Column(Integer)
     tox21_aid = Column(Integer)
     reporter_gene_assay = Column(Text)
-    exp_cell_line_id = Column(Integer, ForeignKey("experimental_cell_lines.id"), 
-            nullable=False)
+    exp_cell_line_id = Column(
+        Integer, ForeignKey("experimental_cell_lines.id"), nullable=False
+    )
     gene_id = Column(Integer, ForeignKey("genes.id"))
-    target = Column(Text, nullable=False) 
+    target = Column(Text, nullable=False)
     target_effect = Column(Text, nullable=False)
     target_mode_of_action = Column(TargetModeOfActionEnum, nullable=False)
     kit = Column(Text)
@@ -136,7 +142,7 @@ class ToxAssay(Base):
 
 class Tox21Molecule(Base):
     """Model to store molecule data from the tox21 dataset
-    
+
     Attribute:
         pubchem_cid (int):
             ID of the compound in pubchem
@@ -148,9 +154,9 @@ class Tox21Molecule(Base):
             Polymer genome molecule fingerprint for the compound
         cluster (int):
             Cluster the compound belongs to based on the paper
-            Cooper and Schürer, “Improving the Utility of the Tox21 Dataset by 
-            Deep Metadata Annotations and Constructing Reusable Benchmarked Chemical 
-            Reference Signatures,” Molecules, vol. 24, no. 8, p. 1604, Apr. 2019, 
+            Cooper and Schürer, “Improving the Utility of the Tox21 Dataset by
+            Deep Metadata Annotations and Constructing Reusable Benchmarked Chemical
+            Reference Signatures,” Molecules, vol. 24, no. 8, p. 1604, Apr. 2019,
             doi: 10.3390/molecules24081604.
     """
 
@@ -163,9 +169,10 @@ class Tox21Molecule(Base):
     fingerprint = Column(JSON)
     cluser = Column(Integer)
 
+
 class Tox21Data(Base):
     """Model to store tox21 data
-    
+
     Attribute:
         molecule_id (int):
             Tox21Molecule id
