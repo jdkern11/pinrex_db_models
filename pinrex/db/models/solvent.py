@@ -36,8 +36,6 @@ class Solvent(Base):
     map4_fingerprint = Column(JSON, nullable=True)
     names = relationship("SolventName", back_populates="solvent")
     solubility_data = relationship("SolubilityData", back_populates="solvent")
-    brettmann_lab = relationship("BrettmannLab", back_populates="solvents")
-
 
 class SolventName(Base):
     """Model to store the many solvent names

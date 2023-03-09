@@ -50,7 +50,6 @@ class Polymer(Base):
     smiles = Column(Text, unique=True)
     canonical_smiles = Column(Text)
     solubility_data = relationship("SolubilityData", back_populates="polymers")
-    brettmann_lab = relationship("BrettmannLab", back_populates="polymers")
     fingerprint = Column(JSON)
     category = Column(Text, nullable=True)
     properties = relationship("PolymerProperty", back_populates="polymer")
