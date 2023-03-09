@@ -21,6 +21,7 @@ class BrettmannLabPolymer(Base):
     pol_id = Column(Integer, ForeignKey("polymers.id"))
     name = Column(Text, nullable=False, unique=True)
 
+
 class BrettmannLabSolvent(Base):
     """Model to store brettmann lab data
 

@@ -4,6 +4,7 @@ from sqlalchemy.dialects.postgresql import ARRAY
 
 from pinrex.db._base import Base
 
+
 class CSSTExperiment(Base):
     """Crystal 16 Dissolition/Solubility Test Experiment model
 
@@ -18,7 +19,7 @@ class CSSTExperiment(Base):
         description (str): description of the experiment
         start_of_experiment (datetime): time the experiment was started
     """
-    
+
     __tablename__ = "csst_experiments"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -30,6 +31,7 @@ class CSSTExperiment(Base):
     lab_journal = Column(Text)
     description = Column(Text)
     start_of_experiment = Column(DateTime)
+
 
 class CSSTTemperatureProgram(Base):
     """
@@ -49,6 +51,7 @@ class CSSTTemperatureProgram(Base):
     sample_load = Column(JSON, nullable=False)
     experiment = Column(JSON, nullable=False)
 
+
 class CSSTReactor(Base):
     """Crystal 16 reactor model
 
@@ -62,10 +65,19 @@ class CSSTReactor(Base):
     __tablename__ = "csst_reactors"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    bret_sol_id = Column(Integer, ForeignKey("brettmann_lab_solvents.id"), nullable=False)
-    bret_pol_id = Column(Integer, ForeignKey("brettmann_lab_polymers.id"), nullable=False)
-    csst_temperature_program_id = Column(Integer, ForeignKey("csst_temperature_programs.id"), nullable=False)
-    csst_experiment_id = Column(Integer, ForeignKey("csst_experiments.id"), nullable=False)
+    bret_sol_id = Column(
+        Integer, ForeignKey("brettmann_lab_solvents.id"), nullable=False
+    )
+    bret_pol_id = Column(
+        Integer, ForeignKey("brettmann_lab_polymers.id"), nullable=False
+    )
+    csst_temperature_program_id = Column(
+        Integer, ForeignKey("csst_temperature_programs.id"), nullable=False
+    )
+    csst_experiment_id = Column(
+        Integer, ForeignKey("csst_experiments.id"), nullable=False
+    )
+
 
 class CSSTProperty(Base):
     """Model to store CSST reactor property information
@@ -83,6 +95,7 @@ class CSSTProperty(Base):
     name = Column(Text, nullable=False)
     unit = Column(Text)
 
+
 class CSSTReactorPropertyValue(Base):
     """Model to store CSST single value property information
 
@@ -96,11 +109,12 @@ class CSSTReactorPropertyValue(Base):
     """
 
     __tablename__ = "csst_property_single_values"
-    
+
     id = Column(Integer, primary_key=True, autoincrement=True)
     csst_property_id = Column(Integer, ForeignKey("csst_properties.id"), nullable=False)
     csst_reactor_id = Column(Integer, ForeignKey("csst_reactors.id"), nullable=False)
     value = Column(Float, nullable=False)
+
 
 class CSSTReactorPropertyValues(Base):
     """Model to store CSST list of values for property information
@@ -117,7 +131,7 @@ class CSSTReactorPropertyValues(Base):
     """
 
     __tablename__ = "csst_property_multiple_values"
-    
+
     id = Column(Integer, primary_key=True, autoincrement=True)
     csst_property_id = Column(Integer, ForeignKey("csst_properties.id"), nullable=False)
     csst_reactor_id = Column(Integer, ForeignKey("csst_reactors.id"), nullable=False)
