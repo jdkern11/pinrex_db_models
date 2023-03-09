@@ -124,8 +124,5 @@ class SolubilityData(Base):
     pol_mw_max = Column(Float)
     pol_mw_type = Column(Text)
     conc_mg_per_ml = Column(Float)
-    csst_file = Column(
-        Integer, ForeignKey("csst_files.id"), unique=False, nullable=True
-    )
     solvent = relationship("Solvent", back_populates="solubility_data")
     polymer = relationship("Polymer", back_populates="solubility_data")

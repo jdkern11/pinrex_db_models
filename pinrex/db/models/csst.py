@@ -1,44 +1,125 @@
 """Crystal 16 database models"""
-from sqlalchemy import Column, Integer, Float, DateTime, Text
+from sqlalchemy import Column, Integer, Float, DateTime, Text, ForeignKey, JSON
 from sqlalchemy.dialects.postgresql import ARRAY
 
 from pinrex.db._base import Base
 
-
-class CSSTFile(Base):
-    """Model to store CSST file information
+class CSSTExperiment(Base):
+    """Crystal 16 Dissolition/Solubility Test Experiment model
 
     Attributes:
-        file_name (str):
-            Name of crystal 16 file
-        polymers (list[str]):
-            List of polymers in file
-        solvents (list[str]):
-            List of solvents in file
-        concentrations (list[float]):
-            List of concentrations in file
-        stir_rate (float):
-            Rate of stiring referenced in file
-        start_of_experiment (datetime):
-            Date test was started
-        version (str):
-            Crystal 16 software version referenced in file
-        project (str):
-            Name of project referenced in file
-        original_name (str):
-            Original name of file from user who uploaded it
+        file_name (str): Original filename of the experiment. Note, this file may no
+            longer exist or may be named differently.
+        version (str): version of the data file.
+        experimental_details (str): details about the experiment.
+        experiment_number (str): experiment number.
+        project (str): project name.
+        lab_journal (str): information from the lab journal row.
+        description (str): description of the experiment
+        start_of_experiment (datetime): time the experiment was started
     """
-
-    __tablename__ = "csst_files"
+    
+    __tablename__ = "csst_experiments"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    file_name = Column(Text, unique=True, nullable=False)
-    original_name = Column(Text, nullable=False)
-    polymers = Column(ARRAY(Text, dimensions=1))
-    solvents = Column(ARRAY(Text, dimensions=1))
-    concentrations = Column(ARRAY(Float, dimensions=1))
-    date_added = Column(DateTime(timezone=True), nullable=False)
-    stir_rate = Column(Float, nullable=False)
-    start_of_experiment = Column(DateTime, nullable=False)
+    file_name = Column(Text)
     version = Column(Text, nullable=False)
-    project = Column(Text, nullable=False)
+    experimental_details = Column(Text)
+    experiment_number = Column(Text)
+    project = Column(Text)
+    lab_journal = Column(Text)
+    description = Column(Text)
+    start_of_experiment = Column(DateTime)
+
+class CSSTTemperatureProgram(Base):
+    """
+
+    Attributes:
+        block (str):
+        solvent_tune: json of solvent tuning stage
+        sample_load: json of sample loading stage
+        experiment: json of experiment stage
+    """
+
+    __tablename__ = "csst_temperature_programs"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    block = Column(Text, nullable=False)
+    solvent_tune = Column(JSON, nullable=False)
+    sample_load = Column(JSON, nullable=False)
+    experiment = Column(JSON, nullable=False)
+
+class CSSTReactor(Base):
+    """Crystal 16 reactor model
+
+    Attributes:
+        bret_sol_id (int): solvent id of the solvent the Brettmann Lab tested
+        bret_pol_id (int): polymer id of the polymer the Brettmann Lab tested
+        csst_temperature_program_id (int): temperature program id
+        csst_experiment_id (int): id of the experiment the reactor comes from
+    """
+
+    __tablename__ = "csst_reactors"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    bret_sol_id = Column(Integer, ForeignKey("brettmann_lab_solvents.id"), nullable=False)
+    bret_pol_id = Column(Integer, ForeignKey("brettmann_lab_polymers.id"), nullable=False)
+    csst_temperature_program_id = Column(Integer, ForeignKey("csst_temperature_programs.id"), nullable=False)
+    csst_experiment_id = Column(Integer, ForeignKey("csst_experiments.id"), nullable=False)
+
+class CSSTProperty(Base):
+    """Model to store CSST reactor property information
+
+    Attributes:
+        name (str):
+            Name of the property
+        unit (str):
+            Unit of the property
+    """
+
+    __tablename__ = "csst_properties"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(Text, nullable=False)
+    unit = Column(Text)
+
+class CSSTReactorPropertyValue(Base):
+    """Model to store CSST single value property information
+
+    Attributes:
+        csst_property_id (int):
+            Id of the property in the CSSTProperty table the value represents
+        csst_reactor_id (int):
+            Id of the reactor the property is associated with
+        value (float):
+            Value of the property
+    """
+
+    __tablename__ = "csst_property_single_values"
+    
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    csst_property_id = Column(Integer, ForeignKey("csst_properties.id"), nullable=False)
+    csst_reactor_id = Column(Integer, ForeignKey("csst_reactors.id"), nullable=False)
+    value = Column(Float, nullable=False)
+
+class CSSTReactorPropertyValues(Base):
+    """Model to store CSST list of values for property information
+
+    Attributes:
+        csst_property_id (int):
+            Id in the CSSTProperty table
+        csst_reactor_id (int):
+            Id of the reactor the property is associated with
+        array_index (int):
+            Index of the property value in the original array
+        values (float):
+            Value of the property
+    """
+
+    __tablename__ = "csst_property_multiple_values"
+    
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    csst_property_id = Column(Integer, ForeignKey("csst_properties.id"), nullable=False)
+    csst_reactor_id = Column(Integer, ForeignKey("csst_reactors.id"), nullable=False)
+    array_index = Column(Integer, nullable=False)
+    value = Column(Float, nullable=False)
