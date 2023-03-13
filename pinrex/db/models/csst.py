@@ -12,8 +12,9 @@ class CSSTExperiment(Base):
         file_name (str): Original filename of the experiment. Note, this file may no
             longer exist or may be named differently.
         version (str): version of the data file.
-        experimental_details (str): details about the experiment.
+        experiment_details (str): details about the experiment.
         experiment_number (str): experiment number.
+        experimenter (str): Person who did the experiment.
         project (str): project name.
         lab_journal (str): information from the lab journal row.
         description (str): description of the experiment
@@ -25,8 +26,9 @@ class CSSTExperiment(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     file_name = Column(Text)
     version = Column(Text, nullable=False)
-    experimental_details = Column(Text)
+    experiment_details = Column(Text)
     experiment_number = Column(Text)
+    experimenter = Column(Text)
     project = Column(Text)
     lab_journal = Column(Text)
     description = Column(Text)
