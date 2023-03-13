@@ -40,18 +40,18 @@ class CSSTTemperatureProgram(Base):
 
     Attributes:
         block (str):
-        solvent_tune: json of solvent tuning stage
-        sample_load: json of sample loading stage
-        experiment: json of experiment stage
+        solvent_tune: array of json of solvent tuning stage
+        sample_load: array of json of sample loading stage
+        experiment: array of json of experiment stage
     """
 
     __tablename__ = "csst_temperature_programs"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     block = Column(Text, nullable=False)
-    solvent_tune = Column(JSON, nullable=False)
-    sample_load = Column(JSON, nullable=False)
-    experiment = Column(JSON, nullable=False)
+    solvent_tune = Column(ARRAY(JSON, dimensions=1), nullable=False)
+    sample_load = Column(ARRAY(JSON, dimensions=1), nullable=False)
+    experiment = Column(ARRAY(JSON, dimensions=1), nullable=False)
 
 
 class CSSTReactor(Base):
