@@ -4,7 +4,7 @@ import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.exc import DataError
 from sqlalchemy.orm import sessionmaker, scoped_session
-from sqlalchemy_utils import database_exists, create_database
+from sqlalchemy_utils import database_exists, create_database, drop_database
 
 from pinrex.db import Base
 from pinrex.db.models import polymer, solvent
@@ -24,7 +24,14 @@ def connection():
     )
     if not database_exists(engine.url):
         create_database(engine.url)
-    return engine.connect()
+    else:
+        raise FileExistsError(
+            "Database already exists. Since the database is "
+            + "dropped at the end of testing, stopping the test."
+        )
+    yield engine.connect()
+
+    drop_database(engine.url)
 
 
 @pytest.fixture(scope="session")
