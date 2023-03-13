@@ -25,7 +25,7 @@ class BrettmannLabPolymer(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     pol_id = Column(Integer, ForeignKey("polymers.id"))
-    name = Column(Text, nullable=False, unique=True)
+    name = Column(Text, nullable=False, unique=False)
     number_average_mw_min = Column(Float, nullable=True)
     number_average_mw_max = Column(Float, nullable=True)
     supplier = Column(Text, nullable=True)
@@ -46,5 +46,5 @@ class BrettmannLabSolvent(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     sol_id = Column(Integer, ForeignKey("solvents.id"))
-    name = Column(Text, nullable=True)
+    name = Column(Text, nullable=True, unique=False)
     percent_purity = Column(Float, nullable=True)
