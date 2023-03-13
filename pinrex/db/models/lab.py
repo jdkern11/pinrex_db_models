@@ -38,7 +38,7 @@ class BrettmannLabSolvent(Base):
             Polymer id. If None, material is a solvent.
         name (str):
             Name the brettmann lab refers to the solvent as.
-        purity (float):
+        percent_purity (float):
             Percent purity of the solvent
     """
 
@@ -47,4 +47,4 @@ class BrettmannLabSolvent(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     sol_id = Column(Integer, ForeignKey("solvents.id"))
     name = Column(Text, nullable=True)
-    purity = Column(Float, nullable=True)
+    percent_purity = Column(Float, nullable=True)
