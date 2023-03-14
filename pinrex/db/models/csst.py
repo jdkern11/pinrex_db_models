@@ -43,6 +43,7 @@ class CSSTTemperatureProgram(Base):
         solvent_tune: array of json of solvent tuning stage
         sample_load: array of json of sample loading stage
         experiment: array of json of experiment stage
+        hash: hash to compare temperature programs with for equality
     """
 
     __tablename__ = "csst_temperature_programs"
@@ -52,6 +53,7 @@ class CSSTTemperatureProgram(Base):
     solvent_tune = Column(ARRAY(JSON, dimensions=1), nullable=False)
     sample_load = Column(ARRAY(JSON, dimensions=1), nullable=False)
     experiment = Column(ARRAY(JSON, dimensions=1), nullable=False)
+    hash = Column(Text, nullable=False)
 
 
 class CSSTReactor(Base):

@@ -13,6 +13,4 @@ SQLAlchemy models to format PostgreSQL database for data.
 ```bash
 poetry run alembic revision --autogenerate -m "description of changes"
 poetry run alembic upgrade head
-# skip git hook
-git commit --no-verify -m "message" 
 ```
