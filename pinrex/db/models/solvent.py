@@ -37,6 +37,7 @@ class Solvent(Base):
     names = relationship("SolventName", back_populates="solvent")
     solubility_data = relationship("SolubilityData", back_populates="solvent")
 
+
 class SolventName(Base):
     """Model to store the many solvent names
 

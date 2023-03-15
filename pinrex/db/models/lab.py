@@ -30,6 +30,7 @@ class BrettmannLabPolymer(Base):
     number_average_mw_max = Column(Float, nullable=True)
     supplier = Column(Text, nullable=True)
 
+
 class BrettmannLabSolvent(Base):
     """Model to store brettmann lab data
 
