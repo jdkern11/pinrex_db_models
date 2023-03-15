@@ -116,7 +116,7 @@ class CSSTReactorPropertyValue(Base):
             Value of the property
     """
 
-    __tablename__ = "csst_property_single_values"
+    __tablename__ = "csst_reactor_property_single_values"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     csst_property_id = Column(Integer, ForeignKey("csst_properties.id"), nullable=False)
@@ -125,7 +125,8 @@ class CSSTReactorPropertyValue(Base):
 
 
 class CSSTReactorPropertyValues(Base):
-    """Model to store CSST list of values for property information
+    """Model to store CSST list of values for reactor property information
+    like transmission
 
     Attributes:
         csst_property_id (int):
@@ -138,10 +139,33 @@ class CSSTReactorPropertyValues(Base):
             Value of the property
     """
 
-    __tablename__ = "csst_property_multiple_values"
+    __tablename__ = "csst_reactor_property_multiple_values"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     csst_property_id = Column(Integer, ForeignKey("csst_properties.id"), nullable=False)
     csst_reactor_id = Column(Integer, ForeignKey("csst_reactors.id"), nullable=False)
+    array_index = Column(Integer, nullable=False)
+    value = Column(Float, nullable=False)
+
+class CSSTExperimentPropertyValues(Base):
+    """Model to store CSST list of values for experiment property information
+    like temperature and time
+
+    Attributes:
+        csst_property_id (int):
+            Id in the CSSTProperty table
+        csst_reactor_id (int):
+            Id of the reactor the property is associated with
+        array_index (int):
+            Index of the property value in the original array
+        values (float):
+            Value of the property
+    """
+
+    __tablename__ = "csst_experiment_property_multiple_values"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    csst_property_id = Column(Integer, ForeignKey("csst_properties.id"), nullable=False)
+    csst_experiment_id = Column(Integer, ForeignKey("csst_experiments.id"), nullable=False)
     array_index = Column(Integer, nullable=False)
     value = Column(Float, nullable=False)
