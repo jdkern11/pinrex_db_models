@@ -62,6 +62,8 @@ class CSSTReactor(Base):
     Attributes:
         bret_sol_id (int): solvent id of the solvent the Brettmann Lab tested
         bret_pol_id (int): polymer id of the polymer the Brettmann Lab tested
+        conc (float): concentration of polymer in solvent
+        conc_unit (str): unit of concentration
         csst_temperature_program_id (int): temperature program id
         csst_experiment_id (int): id of the experiment the reactor comes from
     """
@@ -75,6 +77,8 @@ class CSSTReactor(Base):
     bret_pol_id = Column(
         Integer, ForeignKey("brettmann_lab_polymers.id"), nullable=False
     )
+    conc = Column(Float, nullable=False)
+    conc_unit = Column(Text, nullable=False)
     csst_temperature_program_id = Column(
         Integer, ForeignKey("csst_temperature_programs.id"), nullable=False
     )
