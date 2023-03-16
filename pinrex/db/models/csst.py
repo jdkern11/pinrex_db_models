@@ -66,6 +66,7 @@ class CSSTReactor(Base):
         conc_unit (str): unit of concentration
         csst_temperature_program_id (int): temperature program id
         csst_experiment_id (int): id of the experiment the reactor comes from
+        reactor_number (int): the number reactor used
     """
 
     __tablename__ = "csst_reactors"
@@ -85,6 +86,7 @@ class CSSTReactor(Base):
     csst_experiment_id = Column(
         Integer, ForeignKey("csst_experiments.id"), nullable=False
     )
+    reactor_number = Column(Integer, nullable=False)
 
 
 class CSSTProperty(Base):
