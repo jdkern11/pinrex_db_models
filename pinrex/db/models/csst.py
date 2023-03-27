@@ -1,4 +1,8 @@
-"""Crystal 16 database models"""
+"""Crystal 16 database models. 
+
+It is coupled to the csst_analyzer package available at 
+https://github.com/jdkern11/csst_analyzer
+"""
 from sqlalchemy import Column, Integer, Float, DateTime, Text, ForeignKey, JSON
 from sqlalchemy.dialects.postgresql import ARRAY
 
@@ -176,3 +180,33 @@ class CSSTExperimentPropertyValues(Base):
     )
     array_index = Column(Integer, nullable=False)
     value = Column(Float, nullable=False)
+
+class CSSTReactorProcessedTemperature(Base):
+    """Model to store processed csst temperature data. 
+    See https://github.com/jdkern11/csst_analyzer/blob/main/csst/processor/models.py
+
+    Attributes:
+        csst_reactor_id (int):
+            Id of the reactor the processed temperature is associated with
+        average_temperature (float):
+            Average temperature the solubility was processed at
+        temperature_range (float):
+             Range of temperatures around the average
+        average_transmission (float):
+            Average transmission at average_temperature +- (temperature_range / 2)
+        median_transmission (float):
+            Median transmission at average_temperature +- (temperature_range / 2)
+        transmission_std (float):
+            standard deviation of transmission at average_temperature +- (temperature_range / 2)
+    """
+
+    __tablename__ = "csst_reactor_processed_temperature_values"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    csst_reactor_id = Column(Integer, ForeignKey("csst_reactors.id"), nullable=False)
+    average_temperature = Column(Float, nullable=False)
+    temperature_range = Column(Float, nullable=False)
+    average_transmission = Column(Float, nullable=False)
+    median_transmission = Column(Float, nullable=False)
+    transmission_std = Column(Float, nullable=False)
+
