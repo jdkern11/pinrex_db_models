@@ -27,6 +27,7 @@ class Chemical(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     smiles = Column(Text, unique=True, nullable=False)
+    cas = Column(Text)
     names = relationship("ChemicalName", back_populates="chemical")
 
 
