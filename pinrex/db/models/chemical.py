@@ -11,6 +11,7 @@ from sqlalchemy import (
 from sqlalchemy.orm import relationship
 
 from pinrex.db._base import Base
+from pinrex.db.helpers import make_name_searchable
 
 
 class Chemical(Base):
@@ -29,6 +30,7 @@ class Chemical(Base):
     smiles = Column(Text, unique=True, nullable=False)
     cas = Column(Text)
     names = relationship("ChemicalName", back_populates="chemical")
+    substructures = relationship("ChemicalSubstructures", back_populates="chemical")
 
 
 class ChemicalSubstructures(Base):
@@ -110,7 +112,7 @@ class ChemicalCost(Base):
     note = Column(Text)
 
 
-def ChemicalName(Base):
+class ChemicalName(Base):
     """
 
     Attributes:
@@ -119,6 +121,7 @@ def ChemicalName(Base):
             pinrex.db.helpers.make_name_searchable
         chemical_id (int): chemical id the name references
     """
+
     __tablename__ = "chemical_names"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
