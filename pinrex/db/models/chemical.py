@@ -126,6 +126,7 @@ def ChemicalName(Base):
     name = Column(Text, nullable=False)
     search_name = Column(Text, nullable=False)
     naming_convention = Column(Text)
+    notes = Column(Text, nullable=True)
     chemical = relationship("Chemical", back_populates="names")
 
     def __init__(self, **kwargs):
