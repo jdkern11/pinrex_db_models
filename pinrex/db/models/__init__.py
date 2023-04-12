@@ -4,6 +4,7 @@ __all__ = [
     "structure",
     "polymer",
     "monomer",
+    "chemical",
     "polymerization",
     "solvent",
     "toxicity",

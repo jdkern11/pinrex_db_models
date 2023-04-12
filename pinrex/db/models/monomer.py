@@ -1,5 +1,5 @@
 """Monomer related database models"""
-from sqlalchemy import Column, ForeignKey, Integer, Text, UniqueConstraint
+from sqlalchemy import Column, ForeignKey, DateTime, Integer, Text, UniqueConstraint
 from sqlalchemy.orm import relationship
 
 from pinrex.db._base import Base
@@ -12,9 +12,9 @@ class Monomer(Base):
         smiles (str):
             smiles string
         reference_id (str):
-            ID referenced from database monomer taken from
+            ID referenced from database monomer taken from. Deprecated
         reference (str):
-            Database the reference id was taken from (ZINC15, ChEMBL)
+            Database the reference id was taken from (ZINC15, ChEMBL). Deprecated
     """
 
     __tablename__ = "monomers"

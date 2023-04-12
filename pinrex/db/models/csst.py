@@ -181,8 +181,9 @@ class CSSTExperimentPropertyValues(Base):
     array_index = Column(Integer, nullable=False)
     value = Column(Float, nullable=False)
 
+
 class CSSTReactorProcessedTemperature(Base):
-    """Model to store processed csst temperature data. 
+    """Model to store processed csst temperature data.
     See https://github.com/jdkern11/csst_analyzer/blob/main/csst/processor/models.py
 
     Attributes:
@@ -209,4 +210,3 @@ class CSSTReactorProcessedTemperature(Base):
     average_transmission = Column(Float, nullable=False)
     median_transmission = Column(Float, nullable=False)
     transmission_std = Column(Float, nullable=False)
-

@@ -29,3 +29,6 @@ class Smarts(Base):
     monomer_substructures = relationship(
         "MonomerSubstructures", back_populates="smarts"
     )
+    chemical_substructures = relationship(
+        "ChemicalSubstructures", back_populates="smarts"
+    )
