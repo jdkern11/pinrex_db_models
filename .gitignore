@@ -6,6 +6,8 @@
 .*/
 .coverage
 
+data/
+
 !.gitignore
 !.githooks
 !.github/workflows
