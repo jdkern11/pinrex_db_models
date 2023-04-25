@@ -31,6 +31,7 @@ class Chemical(Base):
     cas = Column(Text)
     names = relationship("ChemicalName", back_populates="chemical")
     substructures = relationship("ChemicalSubstructures", back_populates="chemical")
+    reaction_mappings = relationship("ReactionPolymerMapping", back_populates="chemical")
 
 
 class ChemicalSubstructures(Base):

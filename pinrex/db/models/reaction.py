@@ -23,6 +23,8 @@ class Reaction(Base):
     description = Column(Text, nullable=True)
     reference = Column(Text, nullable=True)
 
+    steps = relationship("ReactionStep", back_populates="reactions")
+
 class ReactionStep(Base):
     """Links reaction to specific step in reaction procedure
 
@@ -37,15 +39,50 @@ class ReactionStep(Base):
 
     __tablename__ = "reaction_steps"
 
+    reaction_id = Column(
+        Integer,
+        ForeignKey("reactions.id"),
+        nullable=False,
+        primary_key=True,
+    )
+    reaction_procedure_id = Column(
+        Integer,
+        ForeignKey("reaction_procedures.id"),
+        nullable=False,
+        primary_key=True,
+    )
+    step = Column(Integer, nullable=False, primary_key=True)
+
+    reactions = relationship("Reaction", back_populates="steps")
+    procedures = relationship("ReactionProcedure", back_populates="steps")
+
+    __table_args__ = (
+        UniqueConstraint(
+            "reaction_procedure_id",
+            "reaction_id",
+            "step",
+            name="unique_reaction_step",
+        ),
+    )
+
 class ReactionProcedure(Base):
     """Polymer reaction that consists of several steps
 
     Attributes:
+        name (str):
+            Name of the reaction procedure
         description (str):
             Name of the reaction that is occuring
     """
 
     __tablename__ = "reaction_procedures"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(Text, nullable=False, unique=True)
+    description = Column(Text, nullable=True)
+
+    steps = relationship("ReactionStep", back_populates="procedures")
+    mappings = relationship("ReactionPolymerMapping", back_populates="procedures")
 
 class ReactionPolymerMapping(Base):
     """Maps reaction procedure, starting chemical, and polymer
@@ -60,3 +97,29 @@ class ReactionPolymerMapping(Base):
     """
 
     __tablename__ = "reaction_polymer_mappings"
+
+    reaction_procedure_id = Column(
+        Integer,
+        ForeignKey("reaction_procedures.id"),
+        nullable=False,
+        primary_key=True,
+    )
+    chemical_id = Column(
+        Integer, ForeignKey("chemicals.id"), nullable=False, primary_key=True
+    )
+    pol_id = Column(
+        Integer, ForeignKey("polymers.id"), nullable=False, primary_key=True
+    )
+
+    procedures = relationship("ReactionProcedure", back_populates="mappings")
+    polymer = relationship("Polymer", back_populates="reaction_mappings")
+    chemical = relationship("Chemical", back_populates="reaction_mappings")
+
+    __table_args__ = (
+        UniqueConstraint(
+            "reaction_procedure_id",
+            "pol_id",
+            "chemical_id",
+            name="unique_reaction_polymer_mapping",
+        ),
+    )
