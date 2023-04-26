@@ -31,7 +31,9 @@ class Chemical(Base):
     cas = Column(Text)
     names = relationship("ChemicalName", back_populates="chemical")
     substructures = relationship("ChemicalSubstructures", back_populates="chemical")
-    reaction_mappings = relationship("ReactionPolymerMapping", back_populates="chemical")
+    reaction_mappings = relationship(
+        "ReactionPolymerMapping", back_populates="chemical"
+    )
 
 
 class ChemicalSubstructures(Base):
@@ -55,7 +57,9 @@ class ChemicalSubstructures(Base):
     chemical = relationship("Chemical", back_populates="substructures")
     smarts = relationship("Smarts", back_populates="chemical_substructures")
 
-    __table_args__ = (UniqueConstraint("smarts_id", "chemical_id", name="chemical_smarts_pair"),)
+    __table_args__ = (
+        UniqueConstraint("smarts_id", "chemical_id", name="chemical_smarts_pair"),
+    )
 
 
 class ChemicalSupplier(Base):

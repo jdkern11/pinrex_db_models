@@ -4,6 +4,7 @@ from sqlalchemy.orm import relationship
 
 from pinrex.db._base import Base
 
+
 class Reaction(Base):
     """Individual reaction
 
@@ -24,6 +25,7 @@ class Reaction(Base):
     reference = Column(Text, nullable=True)
 
     steps = relationship("ReactionStep", back_populates="reactions")
+
 
 class ReactionStep(Base):
     """Links reaction to specific step in reaction procedure
@@ -65,6 +67,7 @@ class ReactionStep(Base):
         ),
     )
 
+
 class ReactionProcedure(Base):
     """Polymer reaction that consists of several steps
 
@@ -83,16 +86,53 @@ class ReactionProcedure(Base):
 
     steps = relationship("ReactionStep", back_populates="procedures")
     mappings = relationship("ReactionPolymerMapping", back_populates="procedures")
+    smarts = relationship(
+        "ReactionProcedureStartingSubstructure", back_populates="procedures"
+    )
+
+
+class ReactionProcedureStartingSubstructure(Base):
+    """Starting substructure needed for reaction procedure
+
+    Attributes:
+        reaction_procedure_id (int): ReactionProcedure table id
+        smarts_id (int): structure.Smarts table id
+    """
+
+    __tablename__ = "reaction_procedure_starting_substructure"
+
+    reaction_procedure_id = Column(
+        Integer,
+        ForeignKey("reaction_procedures.id"),
+        nullable=False,
+        primary_key=True,
+    )
+
+    smarts_id = Column(
+        Integer, ForeignKey("smarts.id"), nullable=False, primary_key=True
+    )
+
+    smarts = relationship("Smarts", back_populates="reaction_procedures")
+    procedures = relationship("ReactionProcedure", back_populates="smarts")
+
+    __table_args__ = (
+        UniqueConstraint(
+            "reaction_procedure_id",
+            "smarts_id",
+            name="unique_reaction_procedure_starting_substructure",
+        ),
+    )
+
 
 class ReactionPolymerMapping(Base):
     """Maps reaction procedure, starting chemical, and polymer
 
     Attributes:
-        reaction_procedure_id (int): 
+        reaction_procedure_id (int):
             Id in reaction.ReactionProcedure table
-        pol_id (int): 
+        pol_id (int):
             Id in polymer.Polymer table
-        chemical_id (int): 
+        chemical_id (int):
             Id in chemical.Chemical table
     """
 

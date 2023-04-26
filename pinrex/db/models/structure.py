@@ -32,3 +32,7 @@ class Smarts(Base):
     chemical_substructures = relationship(
         "ChemicalSubstructures", back_populates="smarts"
     )
+
+    reaction_procedures = relationship(
+        "ReactionProcedureStartingSubstructure", back_populates="smarts"
+    )
