@@ -26,11 +26,8 @@ class Smarts(Base):
     smarts = Column(Text, nullable=False)
     description = Column(Text, nullable=True)
     reference = Column(Text, nullable=True)
-    monomer_substructures = relationship(
-        "MonomerSubstructures", back_populates="smarts"
-    )
     chemical_substructures = relationship(
-        "ChemicalSubstructures", back_populates="smarts"
+        "ChemicalSubstructure", back_populates="smarts"
     )
 
     reaction_procedures = relationship(

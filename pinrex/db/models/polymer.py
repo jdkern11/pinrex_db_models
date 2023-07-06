@@ -56,7 +56,6 @@ class Polymer(Base):
     names = relationship("PolymerName", back_populates="polymer")
     applications = relationship("PolymerApplication", back_populates="polymer")
     solubility_data = relationship("SolubilityData", back_populates="polymer")
-    polymerizations = relationship("Polymerization", back_populates="polymers")
     reaction_mappings = relationship("ReactionPolymerMapping", back_populates="polymer")
 
 

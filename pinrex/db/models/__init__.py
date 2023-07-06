@@ -3,10 +3,8 @@
 __all__ = [
     "structure",
     "polymer",
-    "monomer",
     "chemical",
     "reaction",
-    "polymerization",
     "solvent",
     "toxicity",
     "csst",

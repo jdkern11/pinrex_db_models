@@ -22,6 +22,11 @@ class Chemical(Base):
             smiles string
         CAS (str):
             CAS number for the chemical
+        reference_id (str):
+            ID referenced from ChEMBL or ZINC15 database.
+        reference (str):
+            Database the reference id was taken from (ZINC15, ChEMBL). If Null it just
+            means this chemical wasn't found in those databases.
     """
 
     __tablename__ = "chemicals"
@@ -29,14 +34,16 @@ class Chemical(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     smiles = Column(Text, unique=True, nullable=False)
     cas = Column(Text)
+    reference_id = Column(Text, nullable=True)
+    reference = Column(Text, nullable=True)
     names = relationship("ChemicalName", back_populates="chemical")
-    substructures = relationship("ChemicalSubstructures", back_populates="chemical")
+    substructures = relationship("ChemicalSubstructure", back_populates="chemical")
     reaction_mappings = relationship(
         "ReactionPolymerMapping", back_populates="chemical"
     )
 
 
-class ChemicalSubstructures(Base):
+class ChemicalSubstructure(Base):
     """Indicates if SMARTS substructure is located in the chemical
 
     Attributes:
