@@ -9,6 +9,8 @@
 
 SQLAlchemy models to format PostgreSQL database for data.
 
+DEPRECATED IN FAVOR OF POLYDB PACKAGE
+
 ## Upgrade
 ```bash
 poetry run alembic revision --autogenerate -m "description of changes"
